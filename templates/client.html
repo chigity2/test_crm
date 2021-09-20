@@ -4,36 +4,40 @@
 {% block content %}
 
 <br />
-<div class="containe-fluid border border-primary">
-  <div class="row bg-light">
-    <div class="col-lg-4">
-        <h3>Super Long General Engineering Name</h3>
-        <p>50 Naples Lane</p>
-        <p>Montgomery, TX 77356</p>
-        <p>P: 916.555.5555</p>
-        <p>F: 916.555.5555</p>
-    </div>
-    <div class="col-lg-3">
-        <h3>Contacts:</h3>
-        <p><span>Sean Chiquet</span><i class="bi bi-star"></i><br/><span>sean.chiquet@yahoo.com</span></p>
-        <p><span>Tim Taylor</span><br/><span>tim@thetoolmantaylor.com</span></p>
-    </div>
-    <div class="col-lg-3">
-        <p>Labor Type: Non-Union</p>
-        <p>Prevailing Wage: Yes</p>
-        <p>Trades:</p>
-        <ul>
-            <li>008500: Vinyl Windows</li>
-            <li>008500: Glass and Glazing</li>
-            <li>008500: Fiberglass Doors</li>
-            <li>007500: Fiber Cement Siding</li>
-        </ul>
-    </div>
-    <div class="col-lg-2">
-        <p>License Number: 9999999</p>
-        <p>Expires: 12/25/2025</p>
+<div class="d-flex justify-content-between"><h2>Super Long Engineering Company Name</h2><div><button class="btn btn-danger" type="submit">Log Call</button><button class="btn btn-warning mx-2" type="submit">New Note</button></div></div>
+<!-- left column of details-->
+<div class="container-fluid px-4">
+  <div class="row my-3 gx-3">
+<!-- general information about the sub-->
+    <div class="col-3">
+        <div class="p-3 border bg-white ">
+            <div class="d-flex justify-content-between"><h6 class="fw-bold">Details:</h6><i class="bi bi-pencil-square"></i></div>
+            <hr class="m-1">
+            <p>50 Naples Lane</p>
+            <p>Montgomery, TX 77356</p>
+            <p>P: 916.555.5555</p>
+            <p>F: 916.555.5555</p>
+        </div>
+<!-- contact information for the sub-->
+        <div class="p-3 border bg-white my-3">
+            <div class="d-flex justify-content-between"><h6 class="fw-bold">Contacts</h6><i class="bi bi-pencil-square"></i></div>
+            <hr class="m-1">
+            <p>Sean Chiquet: sean.chiquet@yahoo.com</p>
+        </div>
+<!-- trades and labor information-->
+        <div class="border p-3 bg-white">
+            <div class="d-flex justify-content-between"><h6 class="fw-bold">Trades:</h6><i class="bi bi-pencil-square"></i></div>
+            <hr class="m-1">
+            <ul>
+                <li>008500: Vinyl Windows</li>
+                <li>008500: Glass and Glazing</li>
+                <li>008500: Fiberglass Doors</li>
+                <li>007500: Fiber Cement Siding</li>
+            </ul>
+        </div>
     </div>
   </div>
 </div>
+
 
 {% endblock %}

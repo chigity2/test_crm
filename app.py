@@ -45,18 +45,26 @@ def tasks():
             return "there was an error adding that task"
 
     else:
-        tasks = taskList.query.filter_by(done=False)
+        tasks = taskList.query.filter_by(done=False).all()
         return render_template("tasks.html", tasks = tasks)
 
 @app.route('/clear/<int:id>')
 def clearTask(id=id):
+    #get ID of the task that was cleared on the task page
     taskClear = taskList.query.filter_by(id=id).first()
+    #toggle the "done" column which is a bool
     taskClear.done = not taskClear.done
+    #push to database
     try:
         db.session.commit()
         return redirect('/tasks')
     except:
         return "there was en error clearing task"
+
+@app.route('/testing')
+def testing():
+    tasks = taskList.query.all()
+    return render_template('testing.html', tasks=tasks)
 
 @app.errorhandler(404)
 def page_not_found(e):

@@ -21,9 +21,9 @@
               <div class="nav_list">
                 <a href="{{url_for('index')}}" class="nav_link {{'active' if active_page == 'index' else '' }}"> <i class='bi bi-speedometer nav_icon'></i> <span class="nav_name">Dashboard</span> </a>
                 <a href="{{url_for('client')}}" class="nav_link {{'active' if active_page == 'client' else '' }}"> <i class='bi bi-person nav_icon'></i> <span class="nav_name">Users</span> </a>
-                <a href="#" class="nav_link" id="task_link"> <i class='bi bi-chat-left-dots nav_icon'></i> <span class="nav_name">Tasks</span></a>
+                <a href="{{url_for('tasks')}}" class="nav_link {{'active' if active_page == 'tasks' else '' }}"> <i class='bi bi-chat-left-dots nav_icon'></i> <span class="nav_name">Tasks </span> </a>
                 <a href="#" class="nav_link"> <i class='bi bi-book nav_icon'></i> <span class="nav_name">Bookmark</span> </a>
-                <a href="#" class="nav_link"> <i class='bi bi-folder nav_icon'></i> <span class="nav_name">Files</span> </a>
+                <a href="{{url_for('testing')}}" class="nav_link {{'active' if active_page == 'testing' else '' }}""> <i class='bi bi-blockquote-left nav_icon'></i> <span class="nav_name">Files</span> </a>
                 <a href="#" class="nav_link"> <i class='bi bi-graph-down nav_icon'></i> <span class="nav_name">Stats</span> </a> </div>
           </div> 
           <a href="#" class="nav_link"> <i class='bi-x nav_icon'></i> <span class="nav_name">SignOut</span> </a>
