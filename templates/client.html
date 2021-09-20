@@ -1,19 +1,39 @@
 {% extends "base.html" %}
+{% set active_page = 'client' %}
 {% block title %}Client{% endblock %}
 {% block content %}
 
 <br />
-<div class="row bg-light">
-    <div class="col-lg-2 text-center">PICTURE</div>
-    <div class="col-lg-8">
-        <h3>Sean's Window Company</h3>
+<div class="containe-fluid border border-primary">
+  <div class="row bg-light">
+    <div class="col-lg-4">
+        <h3>Super Long General Engineering Name</h3>
         <p>50 Naples Lane</p>
         <p>Montgomery, TX 77356</p>
+        <p>P: 916.555.5555</p>
+        <p>F: 916.555.5555</p>
+    </div>
+    <div class="col-lg-3">
+        <h3>Contacts:</h3>
+        <p><span>Sean Chiquet</span><i class="bi bi-star"></i><br/><span>sean.chiquet@yahoo.com</span></p>
+        <p><span>Tim Taylor</span><br/><span>tim@thetoolmantaylor.com</span></p>
+    </div>
+    <div class="col-lg-3">
+        <p>Labor Type: Non-Union</p>
+        <p>Prevailing Wage: Yes</p>
+        <p>Trades:</p>
+        <ul>
+            <li>008500: Vinyl Windows</li>
+            <li>008500: Glass and Glazing</li>
+            <li>008500: Fiberglass Doors</li>
+            <li>007500: Fiber Cement Siding</li>
+        </ul>
     </div>
     <div class="col-lg-2">
         <p>License Number: 9999999</p>
         <p>Expires: 12/25/2025</p>
     </div>
+  </div>
 </div>
 
 {% endblock %}
