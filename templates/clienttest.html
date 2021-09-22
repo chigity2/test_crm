@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% set active_page = 'client' %}
-{% block title %}Client{% endblock %}
+{% block title %}{{clientInfo.subName}}{% endblock %}
 {% block content %}
 
 <br />
-<div class="d-flex justify-content-between"><h2>Super Long Engineering Company Name</h2><div><button class="btn btn-danger mx-1" data-bs-toggle="modal" data-bs-target="#logCallModal">Log Call</button><button class="btn btn-warning mx-1" data-bs-toggle="modal" data-bs-target="#newTaskModal">New Note</button></div></div>
+<div class="d-flex justify-content-between"><h2>{{clientInfo.subName}}</h2><div><button class="btn btn-danger mx-1" data-bs-toggle="modal" data-bs-target="#logCallModal">Log Call</button><button class="btn btn-warning mx-1" data-bs-toggle="modal" data-bs-target="#newTaskModal">New Note</button></div></div>
 <!--body area-->
 <div class="container-fluid px-4">
   <div class="row my-3 gx-3">
@@ -15,10 +15,11 @@
             <div class="d-flex justify-content-between"><h6 class="fw-bold">Office:</h6><a href="#" data-bs-toggle="modal" data-bs-target="#mainInfoModal"><i class="bi bi-pencil-square"></i></a></div>
             <hr class="m-1">
             <p>
-            50 Naples Lane <br>
-            Montgomery, TX 77356 <br>
-            P: 916.2222555.5555 <br>
-            F: 916.555.5555
+            {{clientInfo.subAddress}} <br>
+            {% if clientInfo.subAddress2 is not none %}{{clientInfo.subAddress2}} <br> {% else %} {% endif %}
+            {{clientInfo.subCity}}, {{clientInfo.subState}} {{clientInfo.subZip}} <br>
+            P: {{clientInfo.subPhone}} <br>
+            {% if clientInfo.subFax is not none %}F: {{clientInfo.subFax}}{% else %}{% endif %}
             </p>
         </div>
         <!-- contact information for the sub-->
@@ -46,10 +47,10 @@
             <div class="d-flex justify-content-between"><h6 class="fw-bold">Financials:</h6><a href="#" data-bs-toggle="modal" data-bs-target="#companyFinancialsModal"><i class="bi bi-pencil-square"></i></a></div>
             <hr class="m-1">
             <p>
-                Labor Type: Non-Union <br>
-                Does Prevailing: Yes <br>
-                Pre-qualified: Yes <br>
-                Pre-Qualification Amount: $250,000 <br>
+                Labor Type: {{clientInfo.subLabor}}<br>
+                Does Prevailing: {% if clientInfo.subDoesPrevailing == 1 %}Yes{% else %}No{% endif %}<br>
+                Pre-qualified: {% if clientInfo.subPreQual == 1 %}Yes{% else %}No{% endif %}<br>
+                Pre-Qualification Amount: {{clientInfo.subPreQualAmount}} <br>
             </p>
         </div>
     </div>
@@ -140,33 +141,33 @@
       <form id="mainInfoForm">
         <div class="modal-body">
           <div class="form-outline mb-4">
-            <input type="text" id="form6Example3" class="form-control" placeholder="Address Line 1"/ required>
+            <input type="text" id="form6Example3" class="form-control" placeholder="{{clientInfo.subAddress}}">
           </div>
           <div class="form-outline mb-4">
-            <input type="text" id="form6Example3" class="form-control" placeholder="Address Line 2"/>
+            <input type="text" id="form6Example3" class="form-control" placeholder="{% if clientInfo.subAddress2 is not none %}{{clientInfo.subAddress2}}{% else %}Address Line 2{% endif %}"/>
           </div>
           <div class="row mb-4">
             <div class="col-5">
               <div class="form-outline">
-                <input type="text" id="infoFormCity" class="form-control" placeholder="City" required>
+                <input type="text" id="infoFormCity" class="form-control" placeholder="{{clientInfo.subCity}}">
               </div>
             </div>
             <div class="col-3">
               <div class="form-outline">
-                <input type="text" id="infoFormState" class="form-control" placeholder="State" required>
+                <input type="text" id="infoFormState" class="form-control" placeholder="{{clientInfo.subState}}">
               </div>
             </div>
             <div class="col-4">
               <div class="form-outline">
-                <input type="text" id="infoFormZip" class="form-control" placeholder="Zip" required>
+                <input type="text" id="infoFormZip" class="form-control" placeholder="{{clientInfo.subZip}}">
               </div>
             </div>
           </div>
           <div class="form-outline mb-4">
-            <input type="text" id="inputFormPhone" class="form-control" placeholder="Phone" required/>
+            <input type="text" id="inputFormPhone" class="form-control" placeholder="{{clientInfo.subPhone}}">
           </div>
           <div class="form-outline mb-4">
-            <input type="text" id="inputFormFax" class="form-control" placeholder="Fax"/>
+            <input type="text" id="inputFormFax" class="form-control" placeholder="{% if clientInfo.subFax is not none %}{{clientInfo.subFax}}{% else %}Fax{% endif %}"/>
           </div>
         </div>
         <div class="modal-footer">
@@ -232,15 +233,15 @@
           <div class="form-outline mb-4">
             <label for="laborTypeSelect" class="form-label">Labor Type:</label>
             <select class="form-control" name="laborType" id="laborTypeSelect">
-              <option value="Union">Union</option>
-              <option value="Non-Union">Non-Union</option>
+              <option value="Union" {% if clientInfo.subLabor == "Union" %} selected {% endif %}>Union</option>
+              <option value="Non-Union" {% if clientInfo.subLabor == "Non-Union" %} selected {% endif %}>Non-Union</option>
             </select>
           </div>
           <div class="form-outline mb-4">
             <label for="prevailBoolSelect" class="form-label">Does Prevailing Wage Work:</label>
             <select class="form-control" name="prevailBool" id="prevailBoolSelect">
               <option value="yes">Yes</option>
-              <option value="no">No</option>
+              <option value="no" selected>No</option>
             </select>
           </div>
           <div class="form-outline mb-4">

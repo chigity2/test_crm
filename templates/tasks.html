@@ -21,7 +21,7 @@
     {% for tasks in tasks %}
     <li class="list-group-item bg-white">
       <div class="custom-control custom-checkbox">
-        <a href="/clear/{{tasks.id}}"><i class="bi bi-x-square" style="color: red;"></i></a><span class="mx-2">{{tasks.task}}</span>
+        <a href="/clear/{{tasks.task_id}}"><i class="bi bi-x-square" style="color: red;"></i></a><span class="mx-2">{{tasks.task_name}}</span>
       </div>
     </li>
     {% endfor %}
