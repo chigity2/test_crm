@@ -82,6 +82,16 @@ class users(db.Model):
     def __repr__(self) -> str:
         return super().__repr__()
 
+class subcontacts(db.Model):
+    subcontactId = db.Column(db.Integer, primary_key=True)
+    contactName = db.Column(db.String(100))
+    contactEmail = db.Column(db.String(100))
+    contactCell = db.Column(db.String(100))
+    contactLastName = db.Column(db.String(100))
+    subId = db.Column(db.Integer, ForeignKey("subcontractors.subId"))
+
+    def __repr__(self) -> str:
+        return super().__repr__()
 
 
 
@@ -98,19 +108,21 @@ def sublist():
 def testing():
     tasks = taskstable.query.all()
     tradesublinklist = tradesublink.query.all()
+    contactinfo = subcontacts.query.all()
     clientInfo = subcontractors.query.filter_by(subId=1).first()
     subtradelist = db.session.query(tradelist, tradesublink).filter(tradesublink.subId==1).all()
     subNotes = subnotes.query.join(users).add_columns(users.userUsername, subnotes.noteDateCreated, subnotes.subNote, subnotes.noteType).filter(subnotes.subId==1).order_by(desc(subnotes.noteDateCreated)).all()
-    return render_template('testing.html', tasks=tasks, clientInfo=clientInfo, subtradelist=subtradelist, sub1Notes=subNotes, tslinklist=tradesublinklist)
+    return render_template('testing.html', tasks=tasks, clientInfo=clientInfo, subtradelist=subtradelist, sub1Notes=subNotes, tslinklist=tradesublinklist, contactinfo=contactinfo)
 
 @app.route('/client/<int:id>')
 def client(id):
     tasks = taskstable.query.all()
     clientInfo = subcontractors.query.filter_by(subId=id).first()
     alltrades = tradelist.query.all()
+    contactinfo = subcontacts.query.filter_by(subId=id).all()
     subtradelist = tradesublink.query.join(tradelist).add_columns(tradelist.tradeCode, tradelist.tradeName, tradelist.tradeId, tradesublink.tradesublinkID).filter(tradesublink.subId==id).all()
     subNotes = subnotes.query.join(users).add_columns(users.userUsername, subnotes.noteDateCreated, subnotes.subNote, subnotes.noteType).filter(subnotes.subId==id).order_by(desc(subnotes.noteDateCreated)).all()
-    return render_template('client.html', tasks=tasks, clientInfo=clientInfo, subtradelist=subtradelist, subNotes=subNotes, id=id, alltrades=alltrades)
+    return render_template('client.html', tasks=tasks, clientInfo=clientInfo, subtradelist=subtradelist, subNotes=subNotes, id=id, alltrades=alltrades, contactinfo=contactinfo)
 
 ## add form actions below
 
@@ -178,7 +190,7 @@ def addPSub():
             return redirect(url_for('sublist'))
 
         except:
-            return 'there was an unknown error adding note'
+            return 'there was an unknown error adding sub'
 
 @app.route('/tasks', methods=["POST","GET"])
 def tasks():
@@ -237,6 +249,24 @@ def tradeToAdd():
             return redirect(url_for('client', id=sub_id))
         except:
             return "there was en error adding trade"
+
+@app.route('/addContact', methods=["POST","GET"])
+def contactToAdd():
+    
+    if request.method == "POST":
+        contact_name = request.form['firstname']
+        lastname = request.form['lastname']
+        contactEmail = request.form['email']
+        contactCell = request.form['cell']
+        sub_id = request.form['newTradeSubId']
+        contactToAdd = subcontacts(subId=sub_id, contactName=contact_name, contactLastName=lastname, contactEmail=contactEmail, contactCell=contactCell)
+
+        try:
+            db.session.add(contactToAdd)
+            db.session.commit()
+            return redirect(url_for('client', id=sub_id))
+        except:
+            return "there was en error adding contact"
 
 @app.errorhandler(404)
 def page_not_found(e):

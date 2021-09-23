@@ -24,11 +24,12 @@
         </div>
         <!-- contact information for the sub-->
         <div class="p-3 border bg-white my-3">
-            <div class="d-flex justify-content-between"><h6 class="fw-bold">Contacts:</h6><div><a href="#" title="Add Contact" data-bs-toggle="modal" data-bs-target="#addContactModal"><i class="bi bi-plus-square"></i></a> <a href="#" title="Edit Contact" data-bs-toggle="modal" data-bs-target="#editContactModal"><i class="bi bi-pencil-square"></i></a></div></div>
+            <div class="d-flex justify-content-between"><h6 class="fw-bold">Contacts:</h6><div><a href="#" title="Edit Contact" data-bs-toggle="modal" data-bs-target="#editContactModal"><i class="bi bi-pencil-square"></i></a></div></div>
             <hr class="m-1">
             <ul class="list-unstyled">
-                <li>Sean Chiquet: sean.chiquet@yahoo.com</li>
-                <li>Estimating Coordinator: estimating@testcompanyname.com <i class="bi bi-star-fill text-warning" ></i></li>
+              {% for i in contactinfo %}
+                <li>{{i.contactName}} {{i.contactLastName}}: {{i.contactEmail}}</li>
+              {% endfor %}
             </ul>
         </div>
         <!-- trades and labor information-->
@@ -183,34 +184,35 @@
   </div>
 </div>
 
-<!-- Add Contacts Modal-->
-<div class="modal fade" id="addContactModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- Edit Contacts Modal-->
+<div class="modal fade" id="editContactModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Add Contact</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <form id="addContactForm">
+      <form name="addContactForm" action="/addContact" method="POST">
         <div class="modal-body">
           <div class="row mb-4">
             <div class="col">
               <div class="form-outline">
-                <input type="text" id="addContactFirstName" class="form-control" placeholder="First Name" required>
+                <input type="text" name="firstname" class="form-control" placeholder="First Name" required>
               </div>
             </div>
             <div class="col">
               <div class="form-outline">
-                <input type="text" id="addContactLastName" class="form-control" placeholder="Last Name" required>
+                <input type="text" name="lastname" class="form-control" placeholder="Last Name" required>
               </div>
             </div>
           </div>
           <div class="form-outline mb-4">
-            <input type="email" id="addContactEmail" class="form-control" placeholder="Email" required />
+            <input type="email" name="email" class="form-control" placeholder="Email" required />
           </div>
           <div class="form-outline mb-4">
-            <input type="text" id="addContactCell" class="form-control" placeholder="Cell Phone"/>
+            <input type="text" name="cell" class="form-control" placeholder="Cell Phone"/>
           </div>
+          <input type="text" class="visually-hidden" value="{{id}}" name="newTradeSubId">
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -220,8 +222,6 @@
     </div>
   </div>
 </div>
-
-<!-- Edit Contact Modal-->
 
 <!-- Trades Modal-->
 <div class="modal fade" id="editTradesModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

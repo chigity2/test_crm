@@ -31,5 +31,10 @@
 {{notes.noteDateCreated}} {{notes.noteType}} {{notes.subNote}} {{notes.userUsername}}<br>
 {% endfor %}
 
+<h3>Sub Contact Info</h3>
+{% for i in contactinfo %}
+{{i.contactName}}
+{% endfor %}
+
 {% endblock %}
 
