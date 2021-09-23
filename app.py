@@ -89,25 +89,28 @@ class users(db.Model):
 def index():
     return render_template("index.html")
 
-@app.route('/client')
-def client():
-    return render_template("client.html")
+@app.route('/sublist')
+def sublist():
+    clientInfo = subcontractors.query.all()
+    return render_template("sublist.html", clientinfo=clientInfo)
 
 @app.route('/testing')
 def testing():
     tasks = taskstable.query.all()
+    tradesublinklist = tradesublink.query.all()
     clientInfo = subcontractors.query.filter_by(subId=1).first()
     subtradelist = db.session.query(tradelist, tradesublink).filter(tradesublink.subId==1).all()
     subNotes = subnotes.query.join(users).add_columns(users.userUsername, subnotes.noteDateCreated, subnotes.subNote, subnotes.noteType).filter(subnotes.subId==1).order_by(desc(subnotes.noteDateCreated)).all()
-    return render_template('testing.html', tasks=tasks, clientInfo=clientInfo, subtradelist=subtradelist, sub1Notes=subNotes)
+    return render_template('testing.html', tasks=tasks, clientInfo=clientInfo, subtradelist=subtradelist, sub1Notes=subNotes, tslinklist=tradesublinklist)
 
-@app.route('/subtest/<int:id>')
-def subtest(id=id):
+@app.route('/client/<int:id>')
+def client(id):
     tasks = taskstable.query.all()
     clientInfo = subcontractors.query.filter_by(subId=id).first()
-    subtradelist = db.session.query(tradelist, tradesublink).filter(tradesublink.subId==id).all()
+    alltrades = tradelist.query.all()
+    subtradelist = tradesublink.query.join(tradelist).add_columns(tradelist.tradeCode, tradelist.tradeName, tradelist.tradeId, tradesublink.tradesublinkID).filter(tradesublink.subId==id).all()
     subNotes = subnotes.query.join(users).add_columns(users.userUsername, subnotes.noteDateCreated, subnotes.subNote, subnotes.noteType).filter(subnotes.subId==id).order_by(desc(subnotes.noteDateCreated)).all()
-    return render_template('clienttest.html', tasks=tasks, clientInfo=clientInfo, subtradelist=subtradelist, subNotes=subNotes, id=id)
+    return render_template('client.html', tasks=tasks, clientInfo=clientInfo, subtradelist=subtradelist, subNotes=subNotes, id=id, alltrades=alltrades)
 
 ## add form actions below
 
@@ -136,7 +139,7 @@ def addNote():
         try:
             db.session.add(new_note)
             db.session.commit()
-            return redirect(url_for('subtest', id=newNoteSubId))
+            return redirect(url_for('client', id=newNoteSubId))
 
         except:
             return 'there was an unknown error adding note'
@@ -152,7 +155,27 @@ def addPhoneNote():
         try:
             db.session.add(new_note)
             db.session.commit()
-            return redirect(url_for('subtest', id=newNoteSubId))
+            return redirect(url_for('client', id=newNoteSubId))
+
+        except:
+            return 'there was an unknown error adding note'
+
+@app.route('/addSub', methods=["POST","GET"])
+def addPSub():
+    if request.method == "POST":
+        subName = request.form['subName']
+        subAddress = request.form['subAddress']
+        subAddress2 = request.form['subAddress2']
+        subCity = request.form['subCity']
+        subState = request.form['subState']
+        subPhone = request.form['subPhone']
+        subZip = request.form['subZip']
+        subFax = request.form['subFax']
+        new_note = subcontractors(subName=subName, subAddress=subAddress, subAddress2=subAddress2, subCity=subCity, subState=subState, subZip=subZip, subPhone=subPhone, subFax=subFax)
+        try:
+            db.session.add(new_note)
+            db.session.commit()
+            return redirect(url_for('sublist'))
 
         except:
             return 'there was an unknown error adding note'
@@ -177,7 +200,7 @@ def tasks():
         return render_template("tasks.html", tasks = tasklist)
 
 @app.route('/clear/<int:id>')
-def clearTask(id=id):
+def clearTask(id):
     #get ID of the task that was cleared on the task page
     taskClear = taskstable.query.filter_by(task_id=id).first()
     #toggle the "done" column which is a bool
@@ -189,7 +212,31 @@ def clearTask(id=id):
     except:
         return "there was en error clearing task"
 
+@app.route('/clearTrade/<int:id>/<int:page>')
+def clearTrade(id, page):
+    tradetoClear = tradesublink.query.filter_by(tradesublinkID=id).first()
 
+    try:
+        db.session.delete(tradetoClear)
+        db.session.commit()
+        return redirect(url_for('client', id=page))
+    except:
+        return "there was en error clearing task"
+
+@app.route('/addTradeLink', methods=["POST","GET"])
+def tradeToAdd():
+    
+    if request.method == "POST":
+        trade_id = request.form['addTradeSelect']
+        sub_id = request.form['newTradeSubId']
+        tradeToAdd = tradesublink(subId=sub_id, tradeId=trade_id)
+
+        try:
+            db.session.add(tradeToAdd)
+            db.session.commit()
+            return redirect(url_for('client', id=sub_id))
+        except:
+            return "there was en error adding trade"
 
 @app.errorhandler(404)
 def page_not_found(e):

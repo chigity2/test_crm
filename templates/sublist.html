@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% set active_page = 'sublist' %}
+{% block title %}Subcontractor List{% endblock %}
+{% block content %}
+
+{% for subs in clientinfo %}
+<p><a href="{{url_for('client', id=subs.subId)}}"">{{subs.subName}}</a></p>
+{% endfor %}
+
+<button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#addSubModal">Add Sub</button>
+
+
+
+
+
+<!-- Edit Main info Modal-->
+<div class="modal fade" id="addSubModal" tabindex="-1" aria-labelledby="mainInfoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="mainInfoModalLabel">Add Subcontractor</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form name="addSub" action="/addSub" method="post">
+          <div class="modal-body">
+            <div class="form-outline mb-4">
+            <input type="text" name="subName" class="form-control" placeholder="Subcontractor Name">
+          </div>
+            <div class="form-outline mb-4">
+              <input type="text" name="subAddress" class="form-control" placeholder="Address">
+            </div>
+            <div class="form-outline mb-4">
+              <input type="text" name="subAddress2" class="form-control" placeholder="Address 2"/>
+            </div>
+            <div class="row mb-4">
+              <div class="col-5">
+                <div class="form-outline">
+                  <input type="text" name="subCity" class="form-control" placeholder="City">
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="form-outline">
+                  <input type="text" name="subState" class="form-control" placeholder="State">
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="form-outline">
+                  <input type="text" name="subZip" class="form-control" placeholder="Zip">
+                </div>
+              </div>
+            </div>
+            <div class="form-outline mb-4">
+              <input type="text" name="subPhone" class="form-control" placeholder="Phone">
+            </div>
+            <div class="form-outline mb-4">
+              <input type="text" name="subFax" class="form-control" placeholder="Fax"/>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Add</button>
+          </div>
+        </form>
+      </div>
+    </div>
+</div>
+
+
+
+
+{% endblock %}
+

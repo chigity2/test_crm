@@ -9,7 +9,6 @@
     </div>
 </div>
 
-{{tasks | length}}
 
 {{test_var}}
 {% for item in tasks %}
@@ -23,8 +22,9 @@
     <input type="text" class="form-control" name="tradeName" placeholder="Trade Name">
     <button class="btn btn-primary" type="submit">Add Trade</button>
 </form>
-{% for trades in subtradelist %}
-<p>{{trades.tradelist.tradeCode}} | {{trades.tradelist.tradeName}} | {{trades.tradesublink.tradesublinkID}}</p>
+
+{% for i in tslinklist %}
+<p>{{i.tradesublinkID}} | {{i.tradeId}} | {{i.subId}}</p>
 {% endfor %}
 
 {% for notes in sub1Notes %}
