@@ -33,13 +33,12 @@
         </div>
         <!-- trades and labor information-->
         <div class="border p-3 bg-white my-3">
-            <div class="d-flex justify-content-between"><h6 class="fw-bold">Trades:</h6><a href="#"><i class="bi bi-pencil-square"></i></a></div>
+            <div class="d-flex justify-content-between"><h6 class="fw-bold">Trades:</h6><a href="#" data-bs-toggle="modal" data-bs-target="#editTradesModal"><i class="bi bi-pencil-square"></i></a></div>
             <hr class="m-1">
             <ul class="list-unstyled">
-                <li>008500: Vinyl Windows</li>
-                <li>008500: Glass and Glazing</li>
-                <li>008500: Fiberglass Doors</li>
-                <li>007500: Fiber Cement Siding</li>
+              {% for trades in subtradelist %}
+                <li>{{trades.tradelist.tradeCode}}: {{trades.tradelist.tradeName}}</li>
+               {% endfor %}
             </ul>
         </div>
         <!-- subcontractor financials-->
@@ -61,8 +60,9 @@
             <div class="d-flex justify-content-between"><h6 class="fw-bold">Notes and Conversations:</h6></div>
             <hr class="m-1">
             <ul class="list-unstyled">
-                <li>9/21/2021: <span class="text-danger">schiquet</span>: Called sub to discuss pricing terms for the project in Sacramento.</li>
-                <li>9/20/2021: <span class="text-danger">schiquet</span>:  Added to master sub list.</li>
+              {% for notes in subNotes %}
+                <li><i class="bi {% if notes.noteType == 'phone' %}bi-telephone{% else %}bi-sticky{% endif %} text-primary"></i> {{notes.noteDateCreated}}: <span class="text-danger">{{notes.userUsername}}</span>: {{notes.subNote}}</li>
+              {% endfor %}
             </ul>
         </div>
     </div>
@@ -83,6 +83,7 @@
   </div>
 </div>
 
+{{id}}
 
 {% endblock %}
 {% block modals %}
@@ -100,6 +101,8 @@
           <div class="modal-body">
             <textarea class="form-control" name="addNewTaskTextArea" required></textarea>
           </div>
+          <input type="text" class="visually-hidden" value="{{id}}" name="newNoteSubId">
+          <input type="text" class="visually-hidden" value="note" name="newNoteType">
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             <button type="submit" class="btn btn-primary">Add Note</button>
@@ -113,13 +116,15 @@
 <div class="modal fade" id="logCallModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <form id="logCallForm">
+        <form id="logCallForm" action="/addPhoneNote" method="post">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Log Call</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
+          <input type="text" class="visually-hidden" value="{{id}}" name="newNoteSubId">
+          <input type="text" class="visually-hidden" value="phone" name="newNoteType">
           <div class="modal-body">
-            <textarea class="form-control" id="logCallTextArea" required></textarea>
+            <textarea class="form-control" name="logCallTextArea" required></textarea>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -219,6 +224,29 @@
 
 <!-- Edit Contact Modal-->
 
+<!-- Trades Modal-->
+<div class="modal fade" id="editTradesModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="logCallForm">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Trades</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <ul class="unstyle">
+            {% for trades in subtradelist %} 
+            <li>{{trades.tradelist.tradeCode}}: {{trades.tradelist.tradeName}} <a href="/cleartrade/{{trades.tradesublink.tradesublinkID}}"><i class="bi bi-x-square text-danger"></i></a></li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
 <!-- Edit Financials Modal-->
 <div class="modal fade" id="companyFinancialsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -240,19 +268,19 @@
           <div class="form-outline mb-4">
             <label for="prevailBoolSelect" class="form-label">Does Prevailing Wage Work:</label>
             <select class="form-control" name="prevailBool" id="prevailBoolSelect">
-              <option value="yes">Yes</option>
-              <option value="no" selected>No</option>
+              <option value="yes" {% if clientInfo.subDoesPrevailing == 1 %} selected {% endif %}>Yes</option>
+              <option value="no" {% if clientInfo.subDoesPrevailing == 0 %} selected {% endif %}>No</option>
             </select>
           </div>
           <div class="form-outline mb-4">
             <label for="prequalBoolSelect" class="form-label">Pre-Qualified:</label>
             <select class="form-control" name="laborType" id="prequalBoolSelect">
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
+              <option value="yes" {% if clientInfo.subPreQual == 1 %} selected {% endif %}>Yes</option>
+              <option value="no" {% if clientInfo.subPreQual == 0 %} selected {% endif %}>No</option>
             </select>
           </div>
           <div class="form-outline mb-4">
-            <input type="text" id="prequalAmountText" class="form-control" placeholder="Pre-Qualified Amount"/>
+            <input type="text" id="prequalAmountText" class="form-control" placeholder=" {% if clientInfo.subPreQualAmount > 0 %}{{clientInfo.subPreQualAmount}}{% else %}Pre-Qualified Amount{% endif %}"/>
           </div>
         </div>
         <div class="modal-footer">

@@ -16,9 +16,20 @@
     <p>{{item.task_id}}. {{item.task_name}}</p>
 {% endfor %}
 <br/>
+{{clientInfo.subName}}
 <br/>
+<form name="addTrade" action="/addTrade" METHOD="post">
+    <input type="text" class="form-control" name="tradeCode" placeholder="Trade Code">
+    <input type="text" class="form-control" name="tradeName" placeholder="Trade Name">
+    <button class="btn btn-primary" type="submit">Add Trade</button>
+</form>
+{% for trades in subtradelist %}
+<p>{{trades.tradelist.tradeCode}} | {{trades.tradelist.tradeName}} | {{trades.tradesublink.tradesublinkID}}</p>
+{% endfor %}
 
-
+{% for notes in sub1Notes %}
+{{notes.noteDateCreated}} {{notes.noteType}} {{notes.subNote}} {{notes.userUsername}}<br>
+{% endfor %}
 
 {% endblock %}
 
