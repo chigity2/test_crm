@@ -7,8 +7,6 @@ from sqlalchemy.sql.schema import ForeignKey
 from sqlalchemy import desc
 import secretstuff
 
-
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secretkeythings'
 ## app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://{0}:{1}@{2}/{3}'.format(secretstuff.dbuser, secretstuff.dbpass, secretstuff.dbhost, secretstuff.dbname)
@@ -16,7 +14,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///test.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-
+## CREATE THE DATABASE TABLES BELOW
 class taskstable(db.Model):
     task_id = db.Column(db.Integer, primary_key=True)
     task_name = db.Column(db.String(200))
@@ -93,8 +91,7 @@ class subcontacts(db.Model):
     def __repr__(self) -> str:
         return super().__repr__()
 
-
-
+##SETUP THE MAIN PAGE ROUTES BELOW
 @app.route('/')
 def index():
     return render_template("index.html")
@@ -125,7 +122,6 @@ def client(id):
     return render_template('client.html', tasks=tasks, clientInfo=clientInfo, subtradelist=subtradelist, subNotes=subNotes, id=id, alltrades=alltrades, contactinfo=contactinfo)
 
 ## add form actions below
-
 @app.route('/addTrade', methods=["POST","GET"])
 def addTrade():
     if request.method == "POST":
@@ -267,7 +263,7 @@ def contactToAdd():
             return redirect(url_for('client', id=sub_id))
         except:
             return "there was en error adding contact"
-
+## ERROR HANDLER OBJECTS BELOW
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
