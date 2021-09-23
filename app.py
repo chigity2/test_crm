@@ -11,7 +11,8 @@ import secretstuff
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secretkeythings'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://{0}:{1}@{2}/{3}'.format(secretstuff.dbuser, secretstuff.dbpass, secretstuff.dbhost, secretstuff.dbname)
+## app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://{0}:{1}@{2}/{3}'.format(secretstuff.dbuser, secretstuff.dbpass, secretstuff.dbhost, secretstuff.dbname)
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///test.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -33,7 +34,7 @@ class subcontractors(db.Model):
     subFax = db.Column(db.String(45))
     subLabor = db.Column(db.String(45), default="Non-Union")
     subPreQual = db.Column(db.Integer, default=0)
-    subPreQualAmount = db.Column(db.Integer)
+    subPreQualAmount = db.Column(db.Integer, default=0)
     subAddress2 = db.Column(db.String(45))
     subCity = db.Column(db.String(45))
     subState = db.Column(db.String(45))
